@@ -23,6 +23,11 @@ message AddMapResponse {
 	uint64 id = 1;
 }
 
+// ListMapsResponse contains zero or more maps
+message ListMapsResponse {
+	repeated Map maps = 1;
+}
+
 // Request to get map by id
 message GetMapRequest {
 	uint64 id = 1;
@@ -39,6 +44,13 @@ service Maps {
 		option (google.api.http) = {
 			post: "/maps"
 			body: "*"
+		};
+	};
+
+	// ListMaps returns a ListMapResponse with zero or more Maps
+	rpc ListMaps(google.protobuf.Empty) returns (ListMapsResponse) {
+		option (google.api.http) = {
+			get : "/maps"
 		};
 	};
 

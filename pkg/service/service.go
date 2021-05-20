@@ -38,6 +38,21 @@ func (s *Service) AddMap(ctx context.Context, m *apipb.Map) (*apipb.AddMapRespon
 	return &apipb.AddMapResponse{Id: s.lastID}, nil
 }
 
+func (s *Service) ListMaps(ctx context.Context, _ *emptypb.Empty) (*apipb.ListMapsResponse, error) {
+	s.mu.RLock()
+	defer s.mu.RUnlock()
+
+	var maps []*apipb.Map
+
+	for _, v := range s.entries {
+		maps = append(maps, v)
+	}
+
+	return &apipb.ListMapsResponse{
+		Maps: maps,
+	}, nil
+}
+
 func (s *Service) GetMap(ctx context.Context, req *apipb.GetMapRequest) (*apipb.Map, error) {
 	s.mu.RLock()
 	defer s.mu.RUnlock()

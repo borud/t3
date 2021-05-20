@@ -184,3 +184,43 @@ Also update the `Makefile` rule for generation so it reads
   @buf generate --path proto/*
 
 Then rewrite [`cmd/server/main.go`](cmd/server/main.go) so that it starts both gRPC service and REST service.
+
+## 05 Adding a listing function
+
+First we add the `ListMapsResponse` message:
+
+```protobuf
+message ListMapsResponse {
+  repeated Map maps = 1;
+}
+```
+
+Then we extend the service definition to add support for a `ListMaps` call:
+
+```protobuf
+  rpc ListMaps(google.protobuf.Empty) returns (ListMapResponse) {
+  option (google.api.http) = {
+   get : "/maps"
+  };
+ };
+```
+
+If we try to compile after adding this we will get some error messages indicating that `service.Service` is no longer a valid implementation of
+`apipb.MapsServer`.  This is because the `ListMaps` method is not implemented.  So let's do that:
+
+```go
+func (s *Service) ListMaps(ctx context.Context, _ *emptypb.Empty) (*apipb.ListMapsResponse, error) {
+ s.mu.RLock()
+ defer s.mu.RUnlock()
+
+ var maps []*apipb.Map
+
+ for _, v := range s.entries {
+  maps = append(maps, v)
+ }
+
+ return &apipb.ListMapsResponse{
+  Maps: maps,
+ }, nil
+}
+```
