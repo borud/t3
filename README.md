@@ -88,7 +88,7 @@ init:
 		github.com/bufbuild/buf/cmd/buf
 ```
 
-## Implement service and server
+## 02 service and server
 
 ### Implementing the service
 
@@ -113,6 +113,6 @@ Then create a server which will tie the parts together.  This can be found in
 [`cmd/server/main.go`](cmd/server/main.go) and shows how we tie together the parts.
 
 
-## Implement gRPC client
+## 03 gRPC client
 
 The gRPC client is in [`cmd/client/main.go`](cmd/client/main.go) and is pretty straight forward.
