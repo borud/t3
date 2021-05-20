@@ -1,0 +1,47 @@
+syntax = "proto3";
+package apipb;
+
+import "google/protobuf/empty.proto";
+
+option go_package = "pkg/apipb";
+
+// A map data element with a timestamp given in milliseconds since epoch and some data
+message Map {
+	// Unique ID assigned by backend
+	uint64 id = 1;
+
+	// Timestamp in milliseconds since epoch
+	uint64 timestamp = 2;
+
+	// Binary data
+	bytes data = 3;
+}
+
+// Response to an AddMap request
+message AddMapResponse {
+	uint64 id = 1;
+}
+
+// Request to get map by id
+message GetMapRequest {
+	uint64 id = 1;
+}
+
+// Request to delete map by id
+message DeleteMapRequest {
+	uint64 id = 1;
+}
+
+service Maps {
+	// AddMap returns an AddMapResponse which contains the assigned id.
+	rpc AddMap(Map) returns (AddMapResponse);
+
+	// GetMap returns map given by the id specified in GetMapRequest.
+	rpc GetMap(GetMapRequest) returns (Map);
+
+	// Update updates the map.
+	rpc Update(Map) returns (google.protobuf.Empty);
+
+	// DeleteMap deletes the map given by id in DeleteMapRequest.
+	rpc DeleteMap(DeleteMapRequest) returns (google.protobuf.Empty);
+}
