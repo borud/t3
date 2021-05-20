@@ -17,6 +17,15 @@ vet:
 test:
 	@go test ./...
 
+count:
+	@echo ""
+	@echo "WITH EVERYTHING"
+	@gocloc  --include-lang="Go,Protocol Buffers" .
+	@echo ""
+	@echo "WITH ONLY THE FILES WE MAINTAIN"
+	@gocloc --not-match-d pkg/apipb --include-lang="Go,Protocol Buffers" .
+	
+
 init:
 	@go get -u github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway \
 		github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2 \
