@@ -1,3 +1,6 @@
+server:
+	@cd cmd/server && go build -o ../../bin/server
+
 gen:
 	@buf generate
 
@@ -7,4 +10,3 @@ init:
 		google.golang.org/protobuf/cmd/protoc-gen-go \
 		google.golang.org/grpc/cmd/protoc-gen-go-grpc \
 		github.com/bufbuild/buf/cmd/buf
-	

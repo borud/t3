@@ -87,3 +87,27 @@ init:
 		google.golang.org/grpc/cmd/protoc-gen-go-grpc \
 		github.com/bufbuild/buf/cmd/buf
 ```
+
+## Implement service and server
+
+### Implementing the service
+
+First check out the generated code and look for the service interface.  Our service was named `Maps` in the proto file so the interface definition for the server should be named `MapsServer`.  
+
+*This naming is a bit unfortunate since we tend to distinguish between service and server in our code.  The service is the business logic and the server is the thing that takes care of the plumbing.*
+
+```go
+type MapsServer interface {
+ AddMap(context.Context, *Map) (*AddMapResponse, error)
+ GetMap(context.Context, *GetMapRequest) (*Map, error)
+ Update(context.Context, *Map) (*emptypb.Empty, error)
+ DeleteMap(context.Context, *DeleteMapRequest) (*emptypb.Empty, error)
+}
+```
+
+This is implemented in [`pkg/service/service.go`](pkg/service/service.go)
+
+### Implementing the server
+
+Then create a server which will tie the parts together.  This can be found in
+[`cmd/server/main.go`](cmd/server/main.go) and shows how we tie together the parts.
