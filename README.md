@@ -13,6 +13,8 @@ Create `proto` and `pkg` directory.
 
 ### Make proto file
 
+```protobuf
+
 syntax = "proto3";
 package apipb;
 
@@ -20,7 +22,6 @@ import "google/protobuf/empty.proto";
 
 option go_package = "pkg/apipb";
 
-```protobuf
 message Map {
  uint64 id = 1;
  uint64 timestamp = 2;
