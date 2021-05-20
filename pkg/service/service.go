@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"log"
 	"sync"
 
 	"github.com/borud/t3/pkg/apipb"
@@ -33,6 +34,7 @@ func (s *Service) AddMap(ctx context.Context, m *apipb.Map) (*apipb.AddMapRespon
 
 	s.entries[s.lastID] = m
 
+	log.Printf("AddMap id=%d", s.lastID)
 	return &apipb.AddMapResponse{Id: s.lastID}, nil
 }
 
@@ -45,6 +47,7 @@ func (s *Service) GetMap(ctx context.Context, req *apipb.GetMapRequest) (*apipb.
 		return nil, status.Error(codes.NotFound, "not found")
 	}
 
+	log.Printf("GetMap id=%d", req.Id)
 	return e, nil
 }
 
@@ -59,6 +62,8 @@ func (s *Service) Update(ctx context.Context, m *apipb.Map) (*emptypb.Empty, err
 	}
 
 	proto.Merge(existing, m)
+
+	log.Printf("UpdateMap id=%d", m.Id)
 	return &emptypb.Empty{}, nil
 }
 
@@ -68,5 +73,6 @@ func (s *Service) DeleteMap(ctx context.Context, req *apipb.DeleteMapRequest) (*
 
 	delete(s.entries, req.Id)
 
+	log.Printf("DeleteMap id=%d", req.Id)
 	return &emptypb.Empty{}, nil
 }

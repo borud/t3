@@ -111,3 +111,8 @@ This is implemented in [`pkg/service/service.go`](pkg/service/service.go)
 
 Then create a server which will tie the parts together.  This can be found in
 [`cmd/server/main.go`](cmd/server/main.go) and shows how we tie together the parts.
+
+
+## Implement gRPC client
+
+The gRPC client is in [`cmd/client/main.go`](cmd/client/main.go) and is pretty straight forward.

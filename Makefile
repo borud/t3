@@ -1,8 +1,21 @@
+all: gen test vet build
+
+build: client server
+
+client:
+	@cd cmd/client && go build -o ../../bin/client
+
 server:
 	@cd cmd/server && go build -o ../../bin/server
 
 gen:
 	@buf generate
+
+vet:
+	@go vet ./...
+
+test:
+	@go test ./...
 
 init:
 	@go get -u github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway \
