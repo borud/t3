@@ -48,6 +48,8 @@ func (s *Service) ListMaps(ctx context.Context, _ *emptypb.Empty) (*apipb.ListMa
 		maps = append(maps, v)
 	}
 
+	log.Printf("ListMap %d entries", len(s.entries))
+
 	return &apipb.ListMapsResponse{
 		Maps: maps,
 	}, nil

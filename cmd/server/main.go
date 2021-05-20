@@ -51,7 +51,8 @@ func grpcService() {
 	}
 
 	// Create the gRPC server
-	grpcServer := grpc.NewServer(grpc.UnaryInterceptor(service.LoggingServerInterceptor))
+	//grpcServer := grpc.NewServer(grpc.UnaryInterceptor(service.LoggingServerInterceptor))
+	grpcServer := grpc.NewServer()
 
 	// Register the service with the server
 	apipb.RegisterMapsServer(grpcServer, svc)

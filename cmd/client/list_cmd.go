@@ -22,12 +22,14 @@ func (r *listCmd) Execute(args []string) error {
 		log.Fatalf("error listing maps: %v", err)
 	}
 
-	json, err := json.MarshalIndent(resp.Maps, "", "  ")
-	if err != nil {
-		log.Fatalf("error marshalling results into JSON: %v", err)
-	}
+	if len(resp.Maps) > 0 {
+		json, err := json.MarshalIndent(resp.Maps, "", "  ")
+		if err != nil {
+			log.Fatalf("error marshalling results into JSON: %v", err)
+		}
 
-	fmt.Printf("%s\n", json)
+		fmt.Printf("%s\n", json)
+	}
 
 	return nil
 }

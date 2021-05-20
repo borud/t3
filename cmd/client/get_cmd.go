@@ -36,11 +36,13 @@ func (r *getCmd) Execute(args []string) error {
 		maps = append(maps, m)
 	}
 
-	json, err := json.MarshalIndent(maps, "", "  ")
-	if err != nil {
-		log.Fatalf("error marshalling results into JSON: %v", err)
+	if len(maps) > 0 {
+		json, err := json.MarshalIndent(maps, "", "  ")
+		if err != nil {
+			log.Fatalf("error marshalling results into JSON: %v", err)
+		}
+		fmt.Printf("%s\n", json)
 	}
-	fmt.Printf("%s\n", json)
 
 	return nil
 }
