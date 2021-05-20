@@ -1,5 +1,5 @@
 version: v1beta1
-name: 
 build:
   roots:
     - proto
+    - third_party

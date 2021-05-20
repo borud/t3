@@ -9,7 +9,7 @@ server:
 	@cd cmd/server && go build -o ../../bin/server
 
 gen:
-	@buf generate
+	@buf generate --path proto/*
 
 vet:
 	@go vet ./...
