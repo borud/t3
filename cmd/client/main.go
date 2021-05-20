@@ -1,61 +1,37 @@
 package main
 
 import (
-	"context"
 	"log"
 	"time"
 
 	"github.com/borud/t3/pkg/apipb"
+	"github.com/jessevdk/go-flags"
 	"google.golang.org/grpc"
 )
 
-const connectAddr = "127.0.0.1:4455"
+var opt struct {
+	GRPCAddress string        `long:"grpc-addr" default:"127.0.0.1:4455" description:"gRPC address"`
+	Verbose     bool          `short:"v" long:"verbose" description:"verbose output"`
+	Timeout     time.Duration `long:"timeout" default:"5s" description:"timeout"`
+
+	Add    addCmd    `command:"add" description:"add map entry"`
+	Get    getCmd    `command:"get" description:"remove map entry"`
+	List   listCmd   `command:"list" description:"list map entries"`
+	Update updateCmd `command:"update" description:"list map entries"`
+	Remove removeCmd `command:"remove" description:"remove map entry"`
+}
 
 func main() {
-	// First make a network connection.  We turn of transport
-	// security off for now.
-	conn, err := grpc.Dial(connectAddr, grpc.WithInsecure())
+	p := flags.NewParser(&opt, flags.Default)
+	p.Parse()
+}
+
+// newClient creates a new client given the parmeters it finds in the options.
+func newClient() apipb.MapsClient {
+	conn, err := grpc.Dial(opt.GRPCAddress, grpc.WithInsecure())
 	if err != nil {
-		log.Fatalf("unable to connect to %s: %v", connectAddr, err)
+		log.Fatalf("unable to connect to %s: %v", opt.GRPCAddress, err)
 	}
 
-	// Then we create a client
-	client := apipb.NewMapsClient(conn)
-
-	// Create a map entry
-	newMap := &apipb.Map{
-		Timestamp: uint64(time.Now().UnixNano() / time.Hour.Milliseconds()),
-		Data:      []byte("some SVG map"),
-	}
-
-	ctx := context.Background()
-
-	// Add the map
-	addResp, err := client.AddMap(ctx, newMap)
-	if err != nil {
-		log.Fatalf("error adding map: %v", err)
-	}
-	log.Printf("Added map with id %d", addResp.Id)
-
-	// Get the map by id
-	getResp, err := client.GetMap(ctx, &apipb.GetMapRequest{Id: addResp.Id})
-	if err != nil {
-		log.Fatalf("error getting map with id=%d: %v", addResp.Id, err)
-	}
-	log.Printf("got map: %+v", getResp)
-
-	// Update the map
-	getResp.Data = []byte("some other data that is new")
-
-	_, err = client.Update(ctx, getResp)
-	if err != nil {
-		log.Fatalf("error updating map with id=%d: %v", getResp.Id, err)
-	}
-
-	// Now get the map again
-	getResp, err = client.GetMap(ctx, &apipb.GetMapRequest{Id: getResp.Id})
-	if err != nil {
-		log.Fatalf("error getting map with id=%d: %v", addResp.Id, err)
-	}
-	log.Printf("got updated map: %+v", getResp)
+	return apipb.NewMapsClient(conn)
 }

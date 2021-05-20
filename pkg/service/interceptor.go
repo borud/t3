@@ -11,7 +11,6 @@ import (
 // logs the response it got and then returns the response and any error.
 func LoggingServerInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (resp interface{}, err error) {
 	// This line is logged before the request
-	log.Println()
 	log.Printf("[BEFORE] server=%v method=%s req=%+v", info.Server, info.FullMethod, req)
 
 	// Remember to call the original request
